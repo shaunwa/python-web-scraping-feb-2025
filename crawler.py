@@ -19,8 +19,8 @@ def get_html(filepath, url):
 html = get_html('hacker_news.html', 'https://news.ycombinator.com/')
 soup = BeautifulSoup(html, 'html.parser')
 
-tags = soup.select('span.titleline > a') # <span class="titleline clickable-link">
-print(len(tags))
+tags = soup.select('[href^="http"]:not([href*="ycombinator.com"])') # <span class="titleline clickable-link">
+outgoing_urls = [tag.get('href') for tag in tags]
 
-for tag in tags:
-    print(tag.text)
+for i, url in enumerate(outgoing_urls):
+    get_html(f'scrape-html-{i}.html', url)
